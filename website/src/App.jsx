@@ -2,6 +2,8 @@ import React, { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
+import { Player } from "@remotion/player";
+import { AbsoluteFill, Easing, Img, interpolate, Sequence, useCurrentFrame, useVideoConfig } from "remotion";
 import {
   ArrowRight,
   Bot,
@@ -440,6 +442,133 @@ const queryCards = [
   ["Code notes", "Pull out technical posts worth turning into docs."],
 ];
 
+const askPrompt = "Find design-related bookmarks or likes and list them as cards.";
+
+function frameIn(frame, start, end, from = 0, to = 1) {
+  return interpolate(frame, [start, end], [from, to], {
+    extrapolateLeft: "clamp",
+    extrapolateRight: "clamp",
+    easing: Easing.bezier(0.16, 1, 0.3, 1),
+  });
+}
+
+function AnimatedResultCard({ frame, start, top, left, title, meta, tag, tone = "violet" }) {
+  const opacity = frameIn(frame, start, start + 16);
+  const y = frameIn(frame, start, start + 18, 34, 0);
+  const scale = frameIn(frame, start, start + 18, 0.92, 1);
+
+  return (
+    <div
+      className={`remotion-result-card ${tone}`}
+      style={{
+        top,
+        left,
+        opacity,
+        transform: `translateY(${y}px) scale(${scale})`,
+      }}
+    >
+      <span className="remotion-result-avatar">{title.slice(0, 1)}</span>
+      <div>
+        <strong>{title}</strong>
+        <p>{meta}</p>
+        <small>{tag}</small>
+      </div>
+    </div>
+  );
+}
+
+function AskAiComposition({ screenshot }) {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const typedLength = Math.floor(frameIn(frame, 10, 2 * fps, 0, askPrompt.length));
+  const promptText = askPrompt.slice(0, typedLength);
+  const dialogScale = frameIn(frame, 8, 28, 0.92, 1);
+  const dialogOpacity = frameIn(frame, 5, 24);
+  const dimOpacity = frameIn(frame, 0, 18, 0.18, 0.72);
+  const thinkingOpacity = frameIn(frame, 2.15 * fps, 2.6 * fps);
+  const answerOpacity = frameIn(frame, 2.95 * fps, 3.35 * fps);
+  const scanY = frameIn(frame % (fps * 2), 0, fps * 2, -90, 450);
+  const highlightScale = frameIn(frame, 3 * fps, 4 * fps, 0.9, 1.04);
+
+  return (
+    <AbsoluteFill className="remotion-ask-scene">
+      <Img className="remotion-ask-bg" src={screenshot} />
+      <div className="remotion-ask-dim" style={{ opacity: dimOpacity }} />
+      <div className="remotion-scan" style={{ transform: `translateY(${scanY}px)` }} />
+
+      <div
+        className="remotion-question-panel"
+        style={{
+          opacity: dialogOpacity,
+          transform: `translate(-50%, -50%) scale(${dialogScale})`,
+        }}
+      >
+        <div className="remotion-window-bar">
+          <span>Ask Library</span>
+          <i />
+        </div>
+        <p>Ask questions across your captured bookmarks, likes, and reposts.</p>
+        <div className="remotion-input">
+          <span>{promptText}</span>
+          <b style={{ opacity: frame % 18 < 10 ? 1 : 0 }} />
+        </div>
+        <div className="remotion-submit">Ask AI</div>
+      </div>
+
+      <Sequence from={Math.round(2.25 * fps)} durationInFrames={Math.round(2.8 * fps)} premountFor={fps}>
+        <div className="remotion-thinking" style={{ opacity: thinkingOpacity }}>
+          <Bot size={18} />
+          Searching local library
+          <span />
+          <span />
+          <span />
+        </div>
+      </Sequence>
+
+      <div
+        className="remotion-answer-orbit"
+        style={{
+          opacity: answerOpacity,
+          transform: `translate(-50%, -50%) scale(${highlightScale})`,
+        }}
+      >
+        <span />
+        <strong>3 matched cards</strong>
+      </div>
+
+      <AnimatedResultCard
+        frame={frame}
+        start={Math.round(3.15 * fps)}
+        top={320}
+        left={62}
+        title="Design systems"
+        meta="High-save bookmarks about predictable spacing and stable UI states."
+        tag="Design systems / Save 1.9K"
+      />
+      <AnimatedResultCard
+        frame={frame}
+        start={Math.round(3.5 * fps)}
+        top={374}
+        left={362}
+        title="AI workflows"
+        meta="Posts about turning messy Twitter research into reusable notes."
+        tag="AI workflows / Like 2.8K"
+        tone="cyan"
+      />
+      <AnimatedResultCard
+        frame={frame}
+        start={Math.round(3.85 * fps)}
+        top={292}
+        left={642}
+        title="Writing"
+        meta="A prompt pattern for content repurposing and source-faithful rewrite."
+        tag="Writing / Score 80"
+        tone="silver"
+      />
+    </AbsoluteFill>
+  );
+}
+
 function KineticIndex() {
   const { scrollYProgress } = useScroll();
   const xLeft = useTransform(scrollYProgress, [0, 1], ["0%", "-28%"]);
@@ -548,31 +677,31 @@ function AiPanel() {
         </div>
       </div>
       <motion.div
-        className="ask-card"
+        className="ask-remotion-shell"
         initial={{ opacity: 0.52, scale: 0.94 }}
         whileInView={{ opacity: 1, scale: 1 }}
         whileHover={{ y: -10, rotateX: 2, rotateY: -3 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ type: "spring", stiffness: 170, damping: 18 }}
       >
-        <div className="ask-topline">
-          <Bot size={18} />
-          Ask Library
-        </div>
-        <p className="ask-question">Find design-related bookmarks with high saves.</p>
-        <div className="answer-card">
-          <span className="mini-avatar">D</span>
-          <div>
-            <strong>Design system notes</strong>
-            <p>Matched from bookmarks and likes, sorted by save count and relevance.</p>
-          </div>
-        </div>
-        <div className="answer-card">
-          <span className="mini-avatar violet">A</span>
-          <div>
-            <strong>AI workflow references</strong>
-            <p>Useful posts about agents, retrieval, and personal knowledge systems.</p>
-          </div>
+        <Player
+          component={AskAiComposition}
+          inputProps={{ screenshot: aiChat }}
+          durationInFrames={210}
+          compositionWidth={960}
+          compositionHeight={540}
+          fps={30}
+          initialFrame={72}
+          autoPlay
+          loop
+          initiallyMuted
+          clickToPlay={false}
+          controls={false}
+          style={{ width: "100%", aspectRatio: "16 / 9" }}
+        />
+        <div className="ask-remotion-caption">
+          <Bot size={17} />
+          Live-style AI search demo built from the real Ask Library interface.
         </div>
       </motion.div>
     </section>
@@ -664,6 +793,15 @@ function Dock() {
 }
 
 function App() {
+  useEffect(() => {
+    if (!window.location.hash) return undefined;
+    const timer = window.setTimeout(() => {
+      const target = document.querySelector(window.location.hash);
+      target?.scrollIntoView({ block: "start" });
+    }, 1650);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   return (
     <main id="top">
       <IntroLoader />

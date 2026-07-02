@@ -834,6 +834,7 @@ main {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
   padding: 6.5rem 0;
+  scroll-margin-top: 110px;
 }
 
 .section-heading {
@@ -1077,6 +1078,280 @@ main {
   background: linear-gradient(135deg, #6f63ff, #12b7ff);
 }
 
+.ask-remotion-shell {
+  position: relative;
+  overflow: hidden;
+  padding: 0.72rem;
+  border-radius: 34px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.42)),
+    radial-gradient(circle at 80% 8%, rgba(111, 99, 255, 0.28), transparent 44%);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  box-shadow: 0 34px 110px rgba(30, 25, 72, 0.22);
+  transform-style: preserve-3d;
+}
+
+.ask-remotion-shell::before {
+  content: "";
+  position: absolute;
+  inset: -35% 12% auto auto;
+  width: 22rem;
+  height: 22rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(111, 99, 255, 0.24), transparent 62%);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.ask-remotion-shell > div:first-child {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 26px;
+  background: #111019;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+}
+
+.ask-remotion-caption {
+  position: relative;
+  z-index: 2;
+  margin-top: 0.68rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.52rem;
+  padding: 0.58rem 0.74rem;
+  border-radius: 999px;
+  color: #5b5670;
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  font-size: 0.86rem;
+  font-weight: 760;
+}
+
+.remotion-ask-scene {
+  overflow: hidden;
+  color: #171623;
+  background:
+    radial-gradient(circle at 75% 10%, rgba(111, 99, 255, 0.22), transparent 34%),
+    linear-gradient(135deg, #f7f6fb, #ebe9f4);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.remotion-ask-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remotion-ask-dim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(16, 15, 24, 0.68), rgba(16, 15, 24, 0.12)),
+    rgba(247, 246, 251, 0.64);
+}
+
+.remotion-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 130px;
+  background: linear-gradient(180deg, transparent, rgba(111, 99, 255, 0.2), rgba(17, 183, 255, 0.14), transparent);
+  mix-blend-mode: screen;
+}
+
+.remotion-question-panel {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 520px;
+  padding: 20px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 80px rgba(27, 22, 58, 0.28);
+  backdrop-filter: blur(22px);
+}
+
+.remotion-window-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.remotion-window-bar i {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  background:
+    linear-gradient(135deg, rgba(111, 99, 255, 0.18), rgba(17, 183, 255, 0.1)),
+    rgba(255, 255, 255, 0.74);
+}
+
+.remotion-question-panel p {
+  margin: 0 0 14px;
+  color: rgba(88, 83, 108, 0.86);
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.remotion-input {
+  min-height: 112px;
+  padding: 15px;
+  border-radius: 18px;
+  color: #171623;
+  background: #fff;
+  border: 2px solid rgba(111, 99, 255, 0.28);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.8);
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.remotion-input b {
+  display: inline-block;
+  width: 3px;
+  height: 1.1em;
+  margin-left: 4px;
+  vertical-align: -0.16em;
+  border-radius: 999px;
+  background: #6f63ff;
+}
+
+.remotion-submit {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: grid;
+  place-items: center;
+  min-width: 98px;
+  height: 46px;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #171623, #6f63ff 72%, #11b7ff);
+  font-size: 17px;
+  font-weight: 900;
+  box-shadow: 0 14px 34px rgba(83, 63, 204, 0.26);
+}
+
+.remotion-thinking {
+  position: absolute;
+  left: 50%;
+  top: 72%;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  color: #fff;
+  background: rgba(20, 18, 32, 0.84);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 18px 54px rgba(17, 14, 43, 0.38);
+  transform: translateX(-50%);
+  font-weight: 820;
+}
+
+.remotion-thinking span {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #9d95ff;
+}
+
+.remotion-answer-orbit {
+  position: absolute;
+  left: 50%;
+  top: 49%;
+  width: 190px;
+  height: 190px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  background: radial-gradient(circle, rgba(111, 99, 255, 0.28), rgba(17, 183, 255, 0.08), transparent 68%);
+  box-shadow: 0 0 80px rgba(111, 99, 255, 0.32);
+}
+
+.remotion-answer-orbit span {
+  position: absolute;
+  inset: 18px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.42);
+}
+
+.remotion-answer-orbit strong {
+  padding: 9px 12px;
+  border-radius: 999px;
+  background: rgba(20, 18, 32, 0.84);
+  font-size: 18px;
+}
+
+.remotion-result-card {
+  position: absolute;
+  width: 258px;
+  min-height: 116px;
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 68px rgba(27, 22, 58, 0.22);
+  backdrop-filter: blur(18px);
+}
+
+.remotion-result-card.cyan .remotion-result-avatar {
+  background: linear-gradient(135deg, #11b7ff, #6f63ff);
+}
+
+.remotion-result-card.silver .remotion-result-avatar {
+  color: #171623;
+  background: linear-gradient(135deg, #f7f6fb, #d9d7e3);
+}
+
+.remotion-result-avatar {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #fff;
+  background: linear-gradient(135deg, #171623, #6f63ff);
+  font-weight: 900;
+}
+
+.remotion-result-card strong {
+  display: block;
+  margin-bottom: 3px;
+  color: #171623;
+  font-size: 17px;
+}
+
+.remotion-result-card p {
+  margin: 0;
+  color: #69647a;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.remotion-result-card small {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 5px 7px;
+  border-radius: 999px;
+  color: #5145c9;
+  background: rgba(111, 99, 255, 0.11);
+  font-size: 11px;
+  font-weight: 850;
+}
+
 .accordion {
   display: grid;
   gap: 0.75rem;
@@ -1315,6 +1590,28 @@ body[data-theme="black"] .closing {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035)),
     radial-gradient(circle at 30% 12%, rgba(111, 99, 255, 0.18), transparent 58%);
+}
+
+body[data-theme="dark"] .ask-remotion-shell,
+body[data-theme="black"] .ask-remotion-shell {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.055)),
+    radial-gradient(circle at 80% 8%, rgba(111, 99, 255, 0.28), transparent 44%);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 34px 110px rgba(0, 0, 0, 0.34);
+}
+
+body[data-theme="black"] .ask-remotion-shell {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035)),
+    radial-gradient(circle at 80% 8%, rgba(111, 99, 255, 0.2), transparent 44%);
+}
+
+body[data-theme="dark"] .ask-remotion-caption,
+body[data-theme="black"] .ask-remotion-caption {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.13);
 }
 
 body[data-theme="dark"] .badge-copy strong,
