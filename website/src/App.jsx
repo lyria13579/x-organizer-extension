@@ -31,9 +31,10 @@ import settings from "../../docs/screenshots/en-settings-light.png";
 
 const githubUrl = "https://github.com/lyria13579/x-organizer-extension";
 const downloadUrl = "https://github.com/lyria13579/x-organizer-extension/archive/refs/heads/main.zip";
-const headline = "X Organizer";
+const contactEmail = "teresa4ever0127@gmail.com";
+const headline = "Turn saved X posts into an AI-powered idea library.";
 const subtitle =
-  "Turn your X bookmarks, likes, and reposts into a searchable, categorized, AI-queryable local library.";
+  "Organize bookmarks, extract insights, and turn scattered tweets into product ideas, content drafts, and research notes.";
 const themeOptions = [
   { id: "light", label: "Light", icon: Sun },
   { id: "dark", label: "Dark", icon: Moon },
@@ -216,13 +217,62 @@ function IntroLoader() {
       transition={{ delay: 1.05, duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
       aria-hidden="true"
     >
+      <div className="intro-flow" />
+      <div className="intro-canvas">
+        <Canvas camera={{ position: [0, 0, 5.6], fov: 44 }} dpr={[1, 1.5]}>
+          <ambientLight intensity={0.9} />
+          <pointLight position={[2, 2, 3]} color="#8a76ff" intensity={7} />
+          <Suspense fallback={null}>
+            <IntroParticles />
+          </Suspense>
+        </Canvas>
+      </div>
       <div className="intro-grid">
-        <span>INDEXING LOCAL ARCHIVE</span>
+        <span>LOCAL SIGNALS ARE WAKING UP</span>
         <strong>X Organizer</strong>
         <div className="intro-meter"><i /></div>
-        <small>BOOKMARKS / LIKES / REPOSTS / ASK AI</small>
+        <small>CAPTURE / CLASSIFY / EXTRACT / ASK AI</small>
       </div>
     </motion.div>
+  );
+}
+
+function IntroParticles() {
+  const ref = useRef(null);
+  const particles = useMemo(() => {
+    const count = 720;
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count; i += 1) {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = Math.random() * 4.8;
+      positions[i * 3] = Math.cos(angle) * radius;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 3.1;
+      positions[i * 3 + 2] = Math.sin(angle) * radius * 0.72;
+    }
+    return positions;
+  }, []);
+
+  useFrame((state) => {
+    const time = state.clock.elapsedTime;
+    if (!ref.current) return;
+    ref.current.rotation.y = time * 0.13;
+    ref.current.rotation.z = Math.sin(time * 0.28) * 0.08;
+    ref.current.position.y = Math.sin(time * 0.5) * 0.12;
+  });
+
+  return (
+    <group ref={ref}>
+      <points>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" args={[particles, 3]} />
+        </bufferGeometry>
+        <pointsMaterial color="#f6f2ff" size={0.032} transparent opacity={0.72} />
+      </points>
+      <mesh>
+        <torusKnotGeometry args={[1.12, 0.008, 220, 18]} />
+        <meshBasicMaterial color="#8c7aff" transparent opacity={0.85} />
+      </mesh>
+    </group>
   );
 }
 
@@ -334,7 +384,7 @@ function Header() {
     if (themeOptions.some((option) => option.id === requestedTheme)) return requestedTheme;
     return window.localStorage.getItem("x-organizer-site-theme") || "light";
   });
-  const items = ["Features", "Workflow", "AI", "Design"];
+  const items = ["Ideas", "Features", "Workflow", "AI", "Design"];
 
   useEffect(() => {
     document.body.dataset.theme = theme;
@@ -430,16 +480,58 @@ const features = [
 ];
 
 const workflow = [
-  ["01", "Capture", "Open Bookmarks or Likes, then capture visible posts or start a scroll sync."],
-  ["02", "Organize", "Sort by likes, reposts, saves, time, or recommendation score; switch categories instantly."],
-  ["03", "Ask", "Connect your own LLM key and ask the saved library instead of searching X again."],
+  ["01", "Save tweets", "Keep using X normally. Bookmarks, likes, and reposts become the raw material."],
+  ["02", "AI categorize", "Your own model groups posts into meaningful topics instead of generic folders."],
+  ["03", "Extract insights", "Each card keeps the source, metrics, topic, and the reason it matters."],
+  ["04", "Generate notes", "Turn a useful post into a research note, product angle, or content draft."],
+  ["05", "Build your library", "Search the archive later by intent, not by remembering exact keywords."],
 ];
 
-const queryCards = [
-  ["Design saves", "Show me product design posts with high saves."],
-  ["AI workflows", "List agent and RAG references from my bookmarks."],
-  ["Launch ideas", "Find tweets about distribution, pricing, and product launches."],
-  ["Code notes", "Pull out technical posts worth turning into docs."],
+const inspirationScenes = [
+  {
+    title: "Creator briefs",
+    body: "Turn saved launch threads into angles, hooks, and drafts for your next post.",
+    image: "/inspiration/workstation.jpg",
+    credit: "Charles Deluvio / Unsplash",
+  },
+  {
+    title: "Product signals",
+    body: "Cluster APIs, agents, MCPs, and Web3 payments before they vanish into the feed.",
+    image: "/inspiration/desktop.jpg",
+    credit: "Luca Bravo / Unsplash",
+  },
+  {
+    title: "Research notes",
+    body: "Extract what matters from a tweet and keep it as reusable thinking.",
+    image: "/inspiration/notebook.jpg",
+    credit: "Nick Morrison / Unsplash",
+  },
+];
+
+const beforeAfter = {
+  before: ["Hundreds of saved tweets", "No clear topic map", "Hard to retrieve later", "Good ideas stay buried"],
+  after: ["AI Agent", "Web3 Payment", "MCP / API", "Product Ideas", "Writing Drafts", "Job Research", "Founder Insights"],
+};
+
+const insightCards = [
+  {
+    label: "Tweet Insight Card",
+    title: "Why this post matters",
+    body: "Summarize the useful argument, keep the original source, and attach a category you can browse later.",
+    meta: "Design systems / High saves",
+  },
+  {
+    label: "Product Idea Card",
+    title: "Signal to opportunity",
+    body: "Turn repeated posts about one workflow into a concrete product angle, target user, and next test.",
+    meta: "AI workflow / Builder tool",
+  },
+  {
+    label: "Content Draft Card",
+    title: "Idea to public build",
+    body: "Convert your saved X research into a short post draft without losing the source context.",
+    meta: "Writing / Source faithful",
+  },
 ];
 
 const askPrompt = "Find design-related bookmarks or likes and list them as cards.";
@@ -569,34 +661,112 @@ function AskAiComposition({ screenshot }) {
   );
 }
 
-function KineticIndex() {
-  const { scrollYProgress } = useScroll();
-  const xLeft = useTransform(scrollYProgress, [0, 1], ["0%", "-28%"]);
-  const xRight = useTransform(scrollYProgress, [0, 1], ["-24%", "4%"]);
+function InspirationLibrary() {
+  const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section className="kinetic-section" aria-label="X Organizer creative index">
-      <motion.div className="kinetic-word row-a" style={{ x: xLeft }}>
-        BOOKMARKS / LIKES / REPOSTS / LOCAL ARCHIVE
+    <section className="inspiration-section" id="ideas" aria-label="X Organizer inspiration library">
+      <motion.div
+        className="cinema-board"
+        style={{ backgroundImage: `url(${inspirationScenes[0].image})` }}
+        initial={{ opacity: 0.72, y: 38, scale: 0.98 }}
+        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.82, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <motion.div
+          className="cinema-copy left"
+          initial={{ opacity: 0, x: -26 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.12, duration: 0.7 }}
+        >
+          <span>2026 / PERSONAL IDEA OS</span>
+          <h2>Make X your thinking library.</h2>
+          <p>
+            Your bookmarks and likes are not dead saves. They are creative references, research signals,
+            and product clues waiting to be connected.
+          </p>
+        </motion.div>
+        <motion.div
+          className="cinema-copy right"
+          initial={{ opacity: 0, x: 26 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.22, duration: 0.7 }}
+        >
+          <strong>From scattered posts to clear thinking</strong>
+          <p>Capture what you save, let AI group the signal, then ask the archive when you need a new idea.</p>
+        </motion.div>
+        <div className="cinema-scan" />
       </motion.div>
-      <motion.div className="kinetic-word row-b" style={{ x: xRight }}>
-        SEARCHABLE / CATEGORIZED / AI QUERYABLE
-      </motion.div>
-      <div className="query-strip">
-        {queryCards.map(([title, prompt], index) => (
+      <div className="scene-rail">
+        {inspirationScenes.map((scene, index) => (
           <motion.article
-            className="query-card"
-            key={title}
-            initial={{ opacity: 0.52, y: 24, rotate: index % 2 ? 1.8 : -1.8 }}
-            whileInView={{ opacity: 1, y: 0, rotate: index % 2 ? 0.8 : -0.8 }}
-            whileHover={{ y: -12, rotate: 0, scale: 1.03 }}
+            className="scene-card"
+            key={scene.title}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            whileHover={shouldReduceMotion ? undefined : { y: -12, rotate: index === 1 ? 0 : index === 0 ? -1.5 : 1.5 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ type: "spring", stiffness: 180, damping: 18, delay: index * 0.06 }}
+            transition={{ type: "spring", stiffness: 170, damping: 18, delay: index * 0.07 }}
           >
+            <img src={scene.image} alt={`${scene.title} work scene`} />
             <span>0{index + 1}</span>
-            <h3>{title}</h3>
-            <p>{prompt}</p>
+            <h3>{scene.title}</h3>
+            <p>{scene.body}</p>
+            <small>{scene.credit}</small>
           </motion.article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function BeforeAfter() {
+  return (
+    <section className="section before-after-section" aria-label="Before and after X Organizer">
+      <motion.div className="section-heading" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={reveal} transition={{ duration: 0.65 }}>
+        <span className="eyebrow">Before / After</span>
+        <h2>Not another bookmark manager. A signal workflow.</h2>
+      </motion.div>
+      <div className="compare-grid">
+        <TiltCard className="compare-card before" index={0}>
+          <span className="compare-label">Before</span>
+          <h3>Saved, then forgotten.</h3>
+          {beforeAfter.before.map((item) => (
+            <p key={item}>{item}</p>
+          ))}
+        </TiltCard>
+        <TiltCard className="compare-card after" index={1}>
+          <span className="compare-label">After</span>
+          <h3>Structured into ideas, notes, and product signals.</h3>
+          <div className="after-tags">
+            {beforeAfter.after.map((item) => (
+              <span key={item}>{item}</span>
+            ))}
+          </div>
+        </TiltCard>
+      </div>
+    </section>
+  );
+}
+
+function InsightCards() {
+  return (
+    <section className="section insight-section" aria-label="AI generated library cards">
+      <motion.div className="section-heading" initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={reveal} transition={{ duration: 0.65 }}>
+        <span className="eyebrow">AI-native output</span>
+        <h2>Three cards that make the product feel useful immediately.</h2>
+      </motion.div>
+      <div className="insight-grid">
+        {insightCards.map((card, index) => (
+          <TiltCard className="insight-card" key={card.label} index={index}>
+            <span>{card.label}</span>
+            <h3>{card.title}</h3>
+            <p>{card.body}</p>
+            <small>{card.meta}</small>
+          </TiltCard>
         ))}
       </div>
     </section>
@@ -715,8 +885,24 @@ const faqs = [
     body: "No. The MVP captures posts already rendered in your browser, then stores them locally.",
   },
   {
+    title: "Does it read my X account data?",
+    body: "It works from pages you open yourself, such as Bookmarks or Likes. It does not need your X password or official X developer API.",
+  },
+  {
+    title: "Is my library local or cloud hosted?",
+    body: "The extension stores captured post data in Chrome extension storage on your machine. The website is just the product page.",
+  },
+  {
+    title: "Will my posts be uploaded to an AI model?",
+    body: "Only when you explicitly use AI features with your own API provider. The model request uses the saved local library context needed for the question.",
+  },
+  {
     title: "Where is my API key stored?",
     body: "In Chrome local extension storage. JSON exports do not include the key.",
+  },
+  {
+    title: "Can I export or delete data?",
+    body: "Yes. The extension supports local JSON export, and you can clear extension storage from Chrome when you want to remove local data.",
   },
   {
     title: "Can I download the extension today?",
@@ -751,6 +937,24 @@ function Accordion() {
         ))}
       </div>
     </section>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer className="site-footer">
+      <div>
+        <a className="brand" href="#top" aria-label="Back to X Organizer top">
+          <LogoMark />
+          <span>X Organizer</span>
+        </a>
+        <p>Turn saved tweets into ideas, notes, and product signals.</p>
+      </div>
+      <div className="footer-links">
+        <a href={githubUrl} target="_blank" rel="noreferrer">GitHub</a>
+        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      </div>
+    </footer>
   );
 }
 
@@ -847,8 +1051,10 @@ function App() {
         </div>
         <FloatingFeatureBadges />
       </section>
-      <KineticIndex />
+      <InspirationLibrary />
+      <BeforeAfter />
       <FeatureGrid />
+      <InsightCards />
       <Workflow />
       <AiPanel />
       <Accordion />
@@ -861,6 +1067,7 @@ function App() {
           Star the project
         </a>
       </section>
+      <SiteFooter />
       <Dock />
     </main>
   );
