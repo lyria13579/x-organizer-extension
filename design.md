@@ -28,13 +28,15 @@ The website should feel like a silver hardware product with a live intelligence 
 
 ## Motion System
 
-- Hero text enters with a soft upward reveal.
-- Product screenshots float with subtle parallax.
-- WebGL object rotates continuously and slowly.
-- Feature cards reveal on scroll.
-- Workflow visual uses a scanning line to imply capture and indexing.
-- Dock actions lift on hover and stay visually compact.
-- FAQ uses a smooth accordion expansion.
+- **Typewriter hero**: the primary headline types in character-by-character with a luminous cursor.
+- **Progressive loading rail**: capture, classify, search, and ask steps fill in sequence to make the data pipeline visible.
+- **Magnetic CTAs**: primary buttons follow the pointer slightly and use a passing sheen on hover.
+- **Floating product stack**: screenshots drift with scroll parallax and scale/rotate on hover.
+- **WebGL core**: the central indexing object rotates continuously with orbit rings and particle memory points.
+- **Scroll reveals**: sections enter with blur, lift, and staggered timing.
+- **Tilt cards**: feature cards react to pointer position with 3D rotation and a moving silver highlight.
+- **Dock interactions**: dock icons expand based on hover distance, inspired by motion primitive dock behavior.
+- **Accordion**: FAQ panels expand smoothly with icon rotation.
 
 ## WebGL Element
 
