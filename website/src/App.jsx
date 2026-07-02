@@ -26,7 +26,9 @@ import settings from "../../docs/screenshots/en-settings-light.png";
 
 const githubUrl = "https://github.com/lyria13579/x-organizer-extension";
 const downloadUrl = "https://github.com/lyria13579/x-organizer-extension/archive/refs/heads/main.zip";
-const headline = "X bookmarks and likes, rebuilt as a beautiful AI library.";
+const headline = "X Organizer";
+const subtitle =
+  "Turn your X bookmarks, likes, and reposts into a searchable, categorized, AI-queryable local library.";
 
 const reveal = {
   hidden: { opacity: 0, y: 34, filter: "blur(10px)" },
@@ -527,8 +529,7 @@ function App() {
             <TypewriterText text={headline} />
           </h1>
           <p>
-            Capture what you save on X, organize it into cards and categories, then ask your own LLM to retrieve the ideas
-            you almost forgot.
+            {subtitle}
           </p>
           <div className="hero-actions">
             <MagneticLink className="primary-button" href={downloadUrl}>
