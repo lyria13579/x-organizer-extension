@@ -649,7 +649,6 @@ function App() {
               View on GitHub
             </MagneticLink>
           </div>
-          <FloatingFeatureBadges />
           <div className="metrics-strip" aria-label="Product highlights">
             <span>Bookmarks</span>
             <span>Likes</span>
@@ -661,6 +660,7 @@ function App() {
           <HeroCanvas />
           <ProductStack />
         </div>
+        <FloatingFeatureBadges />
       </section>
       <KineticIndex />
       <FeatureGrid />
