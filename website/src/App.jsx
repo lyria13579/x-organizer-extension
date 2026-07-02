@@ -144,15 +144,32 @@ function TiltCard({ children, className = "", index = 0 }) {
   );
 }
 
-function ProgressiveRail() {
-  const steps = ["Capture", "Classify", "Search", "Ask AI"];
+function FloatingFeatureBadges() {
+  const steps = [
+    { label: "Capture", meta: "visible posts", icon: <Download size={18} /> },
+    { label: "Classify", meta: "AI categories", icon: <Tags size={18} /> },
+    { label: "Search", meta: "intent query", icon: <Search size={18} /> },
+    { label: "Ask AI", meta: "local library", icon: <Brain size={18} /> },
+  ];
   return (
-    <div className="progressive-rail" aria-label="Animated product workflow">
+    <div className="floating-feature-cluster" aria-label="Floating feature badges">
       {steps.map((step, index) => (
-        <div className="progressive-step" key={step}>
-          <span>{step}</span>
-          <i style={{ animationDelay: `${index * 0.42}s` }} />
-        </div>
+        <motion.div
+          className={`floating-feature-badge badge-${index + 1}`}
+          key={step.label}
+          initial={{ opacity: 0, y: 18, scale: 0.92 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          whileHover={{ y: -10, scale: 1.04, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 190, damping: 18, delay: 0.42 + index * 0.08 }}
+        >
+          <span className="badge-orb">{step.icon}</span>
+          <div className="badge-copy">
+            <strong>{step.label}</strong>
+            <small>{step.meta}</small>
+          </div>
+          <i className="badge-line long" />
+          <i className="badge-line short" />
+        </motion.div>
       ))}
     </div>
   );
@@ -632,7 +649,7 @@ function App() {
               View on GitHub
             </MagneticLink>
           </div>
-          <ProgressiveRail />
+          <FloatingFeatureBadges />
           <div className="metrics-strip" aria-label="Product highlights">
             <span>Bookmarks</span>
             <span>Likes</span>

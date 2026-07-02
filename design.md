@@ -38,6 +38,7 @@ The website should feel like a silver hardware product with a live intelligence 
 - **Scroll reveals**: sections enter with blur, lift, and staggered timing.
 - **Kinetic index wall**: oversized archive words move horizontally with scroll, inspired by editorial creative studio sites.
 - **Query cards**: prompt-like cards float over the index wall to connect visual motion to product use cases.
+- **Floating feature badges**: glassmorphism mini cards drift with ambient parallax, similar to SaaS/job-platform hero badges.
 - **Tilt cards**: feature cards react to pointer position with 3D rotation and a moving silver highlight.
 - **Dock interactions**: dock icons expand based on hover distance, inspired by motion primitive dock behavior.
 - **Accordion**: FAQ panels expand smoothly with icon rotation.
