@@ -31,7 +31,7 @@ const subtitle =
   "Turn your X bookmarks, likes, and reposts into a searchable, categorized, AI-queryable local library.";
 
 const reveal = {
-  hidden: { opacity: 0, y: 34, filter: "blur(10px)" },
+  hidden: { opacity: 0.32, y: 34, filter: "blur(8px)" },
   visible: { opacity: 1, y: 0, filter: "blur(0px)" },
 };
 
@@ -156,6 +156,53 @@ function ProgressiveRail() {
       ))}
     </div>
   );
+}
+
+function IntroLoader() {
+  const shouldReduceMotion = useReducedMotion();
+  const [visible, setVisible] = useState(!shouldReduceMotion);
+
+  useEffect(() => {
+    if (shouldReduceMotion) return undefined;
+    const timer = window.setTimeout(() => setVisible(false), 1450);
+    return () => window.clearTimeout(timer);
+  }, [shouldReduceMotion]);
+
+  if (!visible) return null;
+
+  return (
+    <motion.div
+      className="intro-loader"
+      initial={{ clipPath: "inset(0 0 0 0)" }}
+      animate={{ clipPath: "inset(0 0 100% 0)" }}
+      transition={{ delay: 1.05, duration: 0.65, ease: [0.76, 0, 0.24, 1] }}
+      aria-hidden="true"
+    >
+      <div className="intro-grid">
+        <span>INDEXING LOCAL ARCHIVE</span>
+        <strong>X Organizer</strong>
+        <div className="intro-meter"><i /></div>
+        <small>BOOKMARKS / LIKES / REPOSTS / ASK AI</small>
+      </div>
+    </motion.div>
+  );
+}
+
+function CursorSpotlight() {
+  const x = useMotionValue(50);
+  const y = useMotionValue(50);
+  const background = useMotionTemplate`radial-gradient(circle at ${x}% ${y}%, rgba(111, 99, 255, 0.18), rgba(17, 183, 255, 0.08) 16rem, transparent 28rem)`;
+
+  useEffect(() => {
+    function handleMove(event) {
+      x.set((event.clientX / window.innerWidth) * 100);
+      y.set((event.clientY / window.innerHeight) * 100);
+    }
+    window.addEventListener("pointermove", handleMove);
+    return () => window.removeEventListener("pointermove", handleMove);
+  }, [x, y]);
+
+  return <motion.div className="cursor-spotlight" style={{ background }} aria-hidden="true" />;
 }
 
 function EnergyCore() {
@@ -323,6 +370,47 @@ const workflow = [
   ["03", "Ask", "Connect your own LLM key and ask the saved library instead of searching X again."],
 ];
 
+const queryCards = [
+  ["Design saves", "Show me product design posts with high saves."],
+  ["AI workflows", "List agent and RAG references from my bookmarks."],
+  ["Launch ideas", "Find tweets about distribution, pricing, and product launches."],
+  ["Code notes", "Pull out technical posts worth turning into docs."],
+];
+
+function KineticIndex() {
+  const { scrollYProgress } = useScroll();
+  const xLeft = useTransform(scrollYProgress, [0, 1], ["0%", "-28%"]);
+  const xRight = useTransform(scrollYProgress, [0, 1], ["-24%", "4%"]);
+
+  return (
+    <section className="kinetic-section" aria-label="X Organizer creative index">
+      <motion.div className="kinetic-word row-a" style={{ x: xLeft }}>
+        BOOKMARKS / LIKES / REPOSTS / LOCAL ARCHIVE
+      </motion.div>
+      <motion.div className="kinetic-word row-b" style={{ x: xRight }}>
+        SEARCHABLE / CATEGORIZED / AI QUERYABLE
+      </motion.div>
+      <div className="query-strip">
+        {queryCards.map(([title, prompt], index) => (
+          <motion.article
+            className="query-card"
+            key={title}
+            initial={{ opacity: 0.52, y: 24, rotate: index % 2 ? 1.8 : -1.8 }}
+            whileInView={{ opacity: 1, y: 0, rotate: index % 2 ? 0.8 : -0.8 }}
+            whileHover={{ y: -12, rotate: 0, scale: 1.03 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ type: "spring", stiffness: 180, damping: 18, delay: index * 0.06 }}
+          >
+            <span>0{index + 1}</span>
+            <h3>{title}</h3>
+            <p>{prompt}</p>
+          </motion.article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function FeatureGrid() {
   return (
     <section className="section" id="features">
@@ -350,7 +438,7 @@ function FeatureGrid() {
 function Workflow() {
   return (
     <section className="section workflow-section" id="workflow">
-      <motion.div className="workflow-visual" initial={{ opacity: 0, x: -42, scale: 0.96 }} whileInView={{ opacity: 1, x: 0, scale: 1 }} viewport={{ once: true, margin: "-90px" }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
+      <motion.div className="workflow-visual" initial={{ opacity: 0.45, x: -42, scale: 0.96 }} whileInView={{ opacity: 1, x: 0, scale: 1 }} viewport={{ once: true, margin: "-90px" }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
         <img src={libraryDark} alt="Dark mode X Organizer library" />
         <div className="scan-line" />
       </motion.div>
@@ -362,7 +450,7 @@ function Workflow() {
             <motion.div
               className="timeline-item"
               key={title}
-              initial={{ opacity: 0, x: 28 }}
+              initial={{ opacity: 0.36, x: 28 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.55 }}
@@ -398,7 +486,7 @@ function AiPanel() {
       </div>
       <motion.div
         className="ask-card"
-        initial={{ opacity: 0, scale: 0.94 }}
+        initial={{ opacity: 0.52, scale: 0.94 }}
         whileInView={{ opacity: 1, scale: 1 }}
         whileHover={{ y: -10, rotateX: 2, rotateY: -3 }}
         viewport={{ once: true, margin: "-80px" }}
@@ -515,7 +603,9 @@ function Dock() {
 function App() {
   return (
     <main id="top">
+      <IntroLoader />
       <ScrollProgress />
+      <CursorSpotlight />
       <div className="mesh mesh-one" />
       <div className="mesh mesh-two" />
       <Header />
@@ -555,6 +645,7 @@ function App() {
           <ProductStack />
         </div>
       </section>
+      <KineticIndex />
       <FeatureGrid />
       <Workflow />
       <AiPanel />

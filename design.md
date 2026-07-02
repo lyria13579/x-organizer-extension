@@ -29,14 +29,26 @@ The website should feel like a silver hardware product with a live intelligence 
 ## Motion System
 
 - **Typewriter hero**: the primary headline types in character-by-character with a luminous cursor.
+- **Indexing intro**: a short archive-indexing loader creates a stronger opening moment before the page reveals.
+- **Cursor spotlight**: a soft violet/silver light follows pointer position to make the page feel reactive.
 - **Progressive loading rail**: capture, classify, search, and ask steps fill in sequence to make the data pipeline visible.
 - **Magnetic CTAs**: primary buttons follow the pointer slightly and use a passing sheen on hover.
 - **Floating product stack**: screenshots drift with scroll parallax and scale/rotate on hover.
 - **WebGL core**: the central indexing object rotates continuously with orbit rings and particle memory points.
 - **Scroll reveals**: sections enter with blur, lift, and staggered timing.
+- **Kinetic index wall**: oversized archive words move horizontally with scroll, inspired by editorial creative studio sites.
+- **Query cards**: prompt-like cards float over the index wall to connect visual motion to product use cases.
 - **Tilt cards**: feature cards react to pointer position with 3D rotation and a moving silver highlight.
 - **Dock interactions**: dock icons expand based on hover distance, inspired by motion primitive dock behavior.
 - **Accordion**: FAQ panels expand smoothly with icon rotation.
+
+## Reference Mapping
+
+- Creative studio pacing and opening energy: Wonder Makers, Active Theory, Obys, Unseen.
+- Large editorial typography and motion-led index sections: Obys, Recent Design, Refs Gallery.
+- Immersive product storytelling with real screenshots: Immersive Garden, Noomo, Fantik.
+- Media-card/preset-card rhythm: Higgsfield and Tasteskill.
+- Practical design-document framing: getdesign.md and Vercel `design.md`.
 
 ## WebGL Element
 
