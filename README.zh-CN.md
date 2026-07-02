@@ -94,6 +94,8 @@ npm run check
 - `npm run validate`：检查扩展结构和必要文件。
 - `npm test`：运行 `tests/` 下的 Node 测试。
 - `npm run check`：执行结构校验和测试。
+- `npm run dev:web`：启动 `website/` 里的官网前端。
+- `npm run build:web`：构建官网到 `website-dist/`。
 
 ## 目录结构
 
@@ -109,6 +111,7 @@ src/i18n.js                中英文文案
 src/storage.js             chrome.storage.local 与本地预览 fallback
 data/sample-posts.js       本地预览样本
 docs/                      技术说明、截图、隐私说明
+website/                   React + WebGL 官网前端
 tests/                     Node 测试
 ```
 

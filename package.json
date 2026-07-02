@@ -6,10 +6,22 @@
   "description": "Manifest V3 extension for a local-first X/Twitter bookmark, like, and repost organizer.",
   "scripts": {
     "check": "npm run validate && npm test",
+    "dev:web": "vite --config website/vite.config.js --host 127.0.0.1",
+    "build:web": "vite build --config website/vite.config.js",
+    "preview:web": "vite preview --config website/vite.config.js --host 127.0.0.1",
     "test": "node --test tests/*.test.js",
     "validate": "node scripts/validate-extension.mjs"
   },
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.6.1",
+    "lucide-react": "^1.23.0",
+    "motion": "^12.42.2",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "three": "^0.185.1",
+    "vite": "^8.1.2"
   }
 }

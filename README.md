@@ -94,6 +94,8 @@ Available scripts:
 - `npm run validate`: validates extension structure and required files.
 - `npm test`: runs Node test files under `tests/`.
 - `npm run check`: runs validation and tests.
+- `npm run dev:web`: runs the marketing website in `website/`.
+- `npm run build:web`: builds the marketing website to `website-dist/`.
 
 ## Project structure
 
@@ -109,6 +111,7 @@ src/i18n.js                English and Chinese copy
 src/storage.js             chrome.storage.local + local preview fallback
 data/sample-posts.js       sample posts for local preview
 docs/                      technical notes, screenshots, privacy notes
+website/                   React + WebGL marketing website
 tests/                     Node tests
 ```
 
