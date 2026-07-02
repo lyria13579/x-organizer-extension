@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>X Organizer</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="./sidepanel.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="sidebar" aria-label="Organizer navigation">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <span class="brand-mark__hole"></span>
+            <span class="brand-mark__line"></span>
+            <span class="brand-mark__line"></span>
+          </div>
+          <div>
+            <h1 data-i18n="app.title">X Organizer</h1>
+            <p id="syncStatus" data-i18n="app.subtitle.loading">Loading local library...</p>
+          </div>
+        </div>
+
+        <div class="quick-start" aria-label="入门提示">
+          <span data-i18n="quickStart.kicker">QUICK START</span>
+          <strong data-i18n="quickStart.title">先采集，再整理，最后提问。</strong>
+          <small data-i18n="quickStart.body">打开 X 的书签或点赞页，点击采集/同步后再筛选和 AI 对话。</small>
+        </div>
+
+        <div class="stat-grid" aria-label="同步概览">
+          <div>
+            <span id="totalCount">0</span>
+            <small data-i18n="stat.content">内容</small>
+          </div>
+        </div>
+
+        <div class="source-tabs" role="tablist" aria-label="来源筛选">
+          <button class="source-tab is-active" data-source="all" data-i18n="source.all" type="button">全部</button>
+          <button class="source-tab" data-source="bookmark" data-i18n="source.bookmark" type="button">书签</button>
+          <button class="source-tab" data-source="like" data-i18n="source.like" type="button">点赞</button>
+          <button class="source-tab" data-source="retweet" data-i18n="source.retweet" type="button">转发</button>
+        </div>
+
+        <div class="sidebar-menu" aria-label="工具菜单">
+          <button id="captureButton" type="button" data-i18n="button.capture" data-i18n-title="tip.capture">手动采集</button>
+          <button id="askAiButton" type="button" data-i18n="button.askAi" data-i18n-title="tip.ask">AI 对话</button>
+          <button id="tutorialButton" type="button" data-i18n="button.tutorial" data-i18n-title="tip.tutorial">教程</button>
+          <button id="openFullPageButton" type="button" data-i18n="button.fullPage" data-i18n-title="tip.fullPage">展开页面</button>
+          <button id="settingsButton" type="button" data-i18n="button.settings" data-i18n-title="tip.settings">设置</button>
+        </div>
+
+        <div class="sidebar-category-panel">
+          <div class="category-header">
+            <span data-i18n="category.heading">分类</span>
+            <div class="category-actions">
+              <button id="renameCategoryButton" class="quiet-button" data-i18n="category.rename" data-i18n-title="tip.renameCategory" type="button">改名</button>
+              <button id="resetCategoriesButton" class="quiet-button danger-button" data-i18n="button.resetCategories" data-i18n-title="tip.resetCategories" type="button">重置分类</button>
+            </div>
+          </div>
+          <div id="categoryList" class="category-list"></div>
+        </div>
+
+        <div class="sync-note" id="coverageNote"></div>
+      </section>
+
+      <section class="content" aria-label="内容列表">
+        <div id="libraryView" class="library-view">
+          <div class="toolbar">
+            <label class="search-field">
+              <span data-i18n="field.search">搜索</span>
+              <input id="searchInput" type="search" data-i18n-placeholder="field.search.placeholder" placeholder="关键词、作者、标签">
+            </label>
+
+            <label class="select-field">
+              <span data-i18n="field.sort">排序</span>
+              <select id="sortSelect"></select>
+            </label>
+          </div>
+
+          <div class="action-row">
+            <input id="importInput" type="file" accept="application/json,.json" hidden>
+            <button id="refreshButton" type="button" data-i18n="button.capture" data-i18n-title="tip.capture">采集当前页</button>
+            <button id="syncBookmarksButton" type="button" data-i18n="button.syncBookmarks" data-i18n-title="tip.syncBookmarks">同步书签</button>
+            <button id="syncLikesButton" type="button" data-i18n="button.syncLikes" data-i18n-title="tip.syncLikes">同步点赞</button>
+            <button id="aiClassifyButton" type="button" data-i18n="button.aiClassify" data-i18n-title="tip.aiClassify">AI 分类</button>
+            <button id="importButton" type="button" data-i18n="button.import" data-i18n-title="tip.import">导入 JSON</button>
+            <button id="exportButton" type="button" data-i18n="button.export" data-i18n-title="tip.export">导出</button>
+            <button id="copyPromptButton" type="button" data-i18n="button.copyPrompt" data-i18n-title="tip.copyPrompt">复制分类提示</button>
+          </div>
+
+          <div id="topCategoryList" class="category-chip-row" aria-label="顶部分类筛选"></div>
+
+          <div id="operationStatus" class="operation-status" role="status">Ready</div>
+
+          <div class="result-line">
+            <span id="resultCount">0 条内容</span>
+            <span id="activeFilters">全部来源 / 全部分类</span>
+          </div>
+
+          <div id="emptyState" class="empty-state" hidden>
+            <h2 data-i18n="empty.title">还没有可展示的内容</h2>
+            <p data-i18n="empty.body">可以先导入 X JSON 样本，或打开 X 的书签/点赞页后滚动页面，让扩展被动采集可见内容。</p>
+          </div>
+
+          <div id="postList" class="post-list"></div>
+        </div>
+
+        <section id="tutorialView" class="tutorial-view" aria-label="使用教程" hidden>
+          <div class="tutorial-hero">
+            <span data-i18n="tutorial.kicker">DOCS</span>
+            <h2 data-i18n="tutorial.title">从采集到 AI 检索，5 分钟跑通。</h2>
+            <p data-i18n="tutorial.subtitle">这是一份内嵌教程：采集 X 内容、设置自己的模型 API、按热度排序筛选，再用 AI 对本地资料库提问。</p>
+          </div>
+
+          <div class="tutorial-grid">
+            <article class="tutorial-card">
+              <div class="tutorial-card__copy">
+                <span>01</span>
+                <h3 data-i18n="tutorial.capture.title">采集书签和点赞</h3>
+                <p data-i18n="tutorial.capture.body">打开 X 的 Bookmarks 或 Likes 页面，点击“同步书签/同步点赞”。如果只想抓当前页面，点击“采集当前页”。</p>
+              </div>
+              <figure class="tutorial-media">
+                <button class="tutorial-media-button" type="button" data-tutorial-step="capture" data-i18n-title="tutorial.openImage">
+                  <img src="./assets/tutorial-capture.png" data-i18n-alt="tutorial.capture.alt" alt="采集入口和资料库卡片截图" loading="lazy" decoding="async">
+                  <span data-i18n="tutorial.openImage">查看大图</span>
+                </button>
+              </figure>
+            </article>
+
+            <article class="tutorial-card">
+              <div class="tutorial-card__copy">
+                <span>02</span>
+                <h3 data-i18n="tutorial.api.title">设置自己的 API Key</h3>
+                <p data-i18n="tutorial.api.body">进入“设置”，选择模型服务，填写 Base URL、模型名和 API Key，先点“校验 API”，成功后保存。</p>
+              </div>
+              <figure class="tutorial-media">
+                <button class="tutorial-media-button" type="button" data-tutorial-step="api" data-i18n-title="tutorial.openImage">
+                  <img src="./assets/tutorial-settings.png" data-i18n-alt="tutorial.api.alt" alt="设置 API Key 弹窗截图" loading="lazy" decoding="async">
+                  <span data-i18n="tutorial.openImage">查看大图</span>
+                </button>
+              </figure>
+            </article>
+
+            <article class="tutorial-card">
+              <div class="tutorial-card__copy">
+                <span>03</span>
+                <h3 data-i18n="tutorial.sort.title">筛选和排序</h3>
+                <p data-i18n="tutorial.sort.body">用左侧来源切换书签、点赞、转发；顶部搜索关键词、作者或标签；排序可选推荐分、点赞、转发、收藏和时间。</p>
+              </div>
+              <figure class="tutorial-media">
+                <button class="tutorial-media-button" type="button" data-tutorial-step="sort" data-i18n-title="tutorial.openImage">
+                  <img src="./assets/tutorial-filters.png" data-i18n-alt="tutorial.sort.alt" alt="筛选排序和顶部分类标签截图" loading="lazy" decoding="async">
+                  <span data-i18n="tutorial.openImage">查看大图</span>
+                </button>
+              </figure>
+            </article>
+
+            <article class="tutorial-card">
+              <div class="tutorial-card__copy">
+                <span>04</span>
+                <h3 data-i18n="tutorial.ai.title">用 AI 问本地资料库</h3>
+                <p data-i18n="tutorial.ai.body">点击“AI 对话”，例如输入“找出有关设计系统的收藏”。AI 只读取本地已采集内容，回答会以卡片形式列出匹配内容。</p>
+              </div>
+              <figure class="tutorial-media">
+                <button class="tutorial-media-button" type="button" data-tutorial-step="ai" data-i18n-title="tutorial.openImage">
+                  <img src="./assets/tutorial-ask.png" data-i18n-alt="tutorial.ai.alt" alt="AI 对话弹窗截图" loading="lazy" decoding="async">
+                  <span data-i18n="tutorial.openImage">查看大图</span>
+                </button>
+              </figure>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <section id="tutorialLightbox" class="settings-dialog tutorial-lightbox" role="dialog" aria-modal="true" aria-labelledby="tutorialLightboxTitle" hidden>
+      <div class="tutorial-lightbox__panel">
+        <div class="settings-panel__top">
+          <div>
+            <span id="tutorialLightboxCounter" class="tutorial-lightbox__counter">01 / 04</span>
+            <h2 id="tutorialLightboxTitle">教程截图</h2>
+          </div>
+          <button id="closeTutorialLightboxButton" class="icon-button" type="button" aria-label="Close">×</button>
+        </div>
+
+        <p id="tutorialLightboxBody" class="tutorial-lightbox__body"></p>
+        <img id="tutorialLightboxImage" class="tutorial-lightbox__image" src="./assets/tutorial-capture.png" alt="">
+
+        <div class="tutorial-lightbox__actions">
+          <button id="previousTutorialButton" type="button" data-i18n="button.previous">上一张</button>
+          <button id="nextTutorialButton" type="button" data-i18n="button.next">下一张</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="askDialog" class="settings-dialog ask-dialog" role="dialog" aria-modal="true" aria-labelledby="askTitle" hidden>
+      <div class="settings-panel ask-panel">
+        <div class="settings-panel__top">
+          <h2 id="askTitle" data-i18n="ask.title">Ask Library</h2>
+          <button id="closeAskButton" class="icon-button" type="button" aria-label="Close">×</button>
+        </div>
+
+        <p class="ask-note" data-i18n="ask.body">用你已采集到本地的书签、点赞、转发来回答问题。</p>
+
+        <form id="askForm">
+          <label class="settings-grid__wide">
+            <span data-i18n="ask.question">问题</span>
+            <textarea id="askQuestionInput" rows="4" data-i18n-placeholder="ask.placeholder" placeholder="我想找有关设计的收藏或者点赞，请列出来。"></textarea>
+          </label>
+
+          <div class="settings-actions">
+            <button id="askSubmitButton" type="submit" data-i18n="button.ask">询问 AI</button>
+          </div>
+        </form>
+
+        <div id="askAnswer" class="ask-answer" role="status" hidden></div>
+      </div>
+    </section>
+
+    <section id="settingsDialog" class="settings-dialog" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" hidden>
+      <div class="settings-panel">
+        <div class="settings-panel__top">
+          <h2 id="settingsTitle" data-i18n="settings.title">Settings / API</h2>
+          <button id="closeSettingsButton" class="icon-button" type="button" aria-label="Close">×</button>
+        </div>
+
+        <form id="settingsForm" autocomplete="off">
+          <div class="settings-grid">
+            <label>
+              <span data-i18n="settings.language">语言</span>
+              <select id="languageSelect">
+                <option value="zh">中文</option>
+                <option value="en">English</option>
+              </select>
+            </label>
+
+            <label>
+              <span data-i18n="settings.theme">主题</span>
+              <select id="themeSelect">
+                <option value="dark" data-i18n="theme.dark">Dark</option>
+                <option value="light" data-i18n="theme.light">Light</option>
+              </select>
+            </label>
+
+            <label>
+              <span data-i18n="settings.provider">模型服务</span>
+              <select id="providerSelect"></select>
+            </label>
+
+            <label>
+              <span data-i18n="settings.baseUrl">Base URL</span>
+              <input id="baseUrlInput" type="url" spellcheck="false">
+            </label>
+
+            <label>
+              <span data-i18n="settings.model">模型</span>
+              <input id="modelInput" type="text" spellcheck="false">
+            </label>
+
+            <label class="settings-grid__wide">
+              <span data-i18n="settings.apiKey">API Key</span>
+              <input id="apiKeyInput" type="password" data-i18n-placeholder="settings.keyPlaceholder" placeholder="sk-..." autocomplete="new-password" spellcheck="false">
+            </label>
+          </div>
+
+          <div class="settings-status">
+            <span data-i18n="settings.status">状态</span>
+            <strong id="apiValidationStatus" data-i18n="settings.untested">未校验</strong>
+          </div>
+          <div id="apiValidationMessage" class="settings-error" role="status" hidden></div>
+
+          <div class="settings-actions">
+            <button id="validateApiButton" type="button" data-i18n="button.validate">校验 API</button>
+            <button id="saveSettingsButton" type="button" data-i18n="button.save">保存</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <template id="postCardTemplate">
+      <article class="post-card">
+        <div class="post-card__topline">
+          <div class="author">
+            <div class="avatar" aria-hidden="true"></div>
+            <div>
+              <strong class="author-name"></strong>
+              <span class="author-username"></span>
+            </div>
+          </div>
+          <a class="post-link" href="#" target="_blank" rel="noreferrer" data-i18n="card.original">原文</a>
+        </div>
+
+        <p class="post-text"></p>
+        <p class="post-summary"></p>
+
+        <div class="post-meta">
+          <span class="source-badges"></span>
+          <span class="post-date"></span>
+          <span class="confidence"></span>
+        </div>
+
+        <div class="metric-row">
+          <span class="score-pill"></span>
+          <span class="metric likes"></span>
+          <span class="metric retweets"></span>
+          <span class="metric bookmarks"></span>
+          <span class="metric replies"></span>
+        </div>
+
+        <div class="card-footer">
+          <div class="tag-row"></div>
+          <label class="category-picker">
+            <span data-i18n="card.category">分类</span>
+            <select></select>
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <script type="module" src="./sidepanel.js"></script>
+  </body>
+</html>
