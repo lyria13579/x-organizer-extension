@@ -33,6 +33,7 @@ body {
     radial-gradient(circle at 72% 0%, rgba(118, 96, 255, 0.24), transparent 36rem),
     radial-gradient(circle at 16% 12%, rgba(234, 232, 246, 0.95), transparent 28rem),
     linear-gradient(135deg, #f9f8fc 0%, #eeedf4 42%, #f7f6fb 100%);
+  transition: background 0.35s ease, color 0.35s ease;
 }
 
 a {
@@ -182,13 +183,56 @@ main {
 .brand-mark {
   width: 42px;
   height: 42px;
-  display: grid;
-  place-items: center;
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 42px;
   border-radius: 15px;
-  color: #fff;
-  background: linear-gradient(135deg, #171623, #6f63ff 72%, #a8ddff);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.34), 0 14px 28px rgba(73, 58, 160, 0.24);
-  font-weight: 900;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  box-shadow: 0 14px 28px rgba(73, 58, 160, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.brand-mark__card {
+  position: absolute;
+  left: 10px;
+  top: 8px;
+  width: 22px;
+  height: 23px;
+  border: 2px solid currentColor;
+  border-radius: 9px 9px 9px 2px;
+  transform: rotate(-8deg);
+}
+
+.brand-mark__hole,
+.brand-mark__line {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  background: currentColor;
+  border-radius: 999px;
+}
+
+.brand-mark__hole {
+  left: 16px;
+  top: 13px;
+  width: 5px;
+  height: 5px;
+}
+
+.brand-mark__line {
+  left: 19px;
+  width: 11px;
+  height: 3px;
+}
+
+.brand-mark__line.line-one {
+  top: 22px;
+}
+
+.brand-mark__line.line-two {
+  top: 27px;
+  width: 8px;
 }
 
 .nav {
@@ -218,6 +262,40 @@ main {
   display: flex;
   align-items: center;
   gap: 0.6rem;
+}
+
+.theme-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.26rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.76);
+}
+
+.theme-switch button {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  color: #5f5b6e;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  transition: transform 0.22s ease, color 0.22s ease, background 0.22s ease;
+}
+
+.theme-switch button:hover {
+  transform: translateY(-1px);
+  color: var(--ink);
+}
+
+.theme-switch button.active {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 8px 18px rgba(69, 58, 130, 0.14);
 }
 
 .menu-button {
@@ -1093,6 +1171,184 @@ main {
 .dock a:hover {
   background: rgba(255, 255, 255, 0.13);
   transform: translateY(-3px);
+}
+
+body[data-theme="dark"] {
+  --ink: #f8f6ff;
+  --muted: #b9b5cc;
+  --line: rgba(255, 255, 255, 0.12);
+  --shadow: 0 34px 100px rgba(0, 0, 0, 0.42);
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 72% 0%, rgba(118, 96, 255, 0.26), transparent 36rem),
+    radial-gradient(circle at 18% 14%, rgba(54, 47, 94, 0.7), transparent 30rem),
+    linear-gradient(135deg, #151320 0%, #211b36 48%, #111019 100%);
+}
+
+body[data-theme="black"] {
+  --ink: #ffffff;
+  --muted: #a9a7b3;
+  --line: rgba(255, 255, 255, 0.1);
+  --shadow: 0 34px 110px rgba(0, 0, 0, 0.68);
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 70% 4%, rgba(111, 99, 255, 0.24), transparent 34rem),
+    radial-gradient(circle at 14% 18%, rgba(17, 183, 255, 0.1), transparent 24rem),
+    linear-gradient(135deg, #020204 0%, #07070b 48%, #000000 100%);
+}
+
+body[data-theme="dark"] .site-header,
+body[data-theme="black"] .site-header {
+  background: rgba(18, 17, 29, 0.72);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 70px rgba(0, 0, 0, 0.34);
+}
+
+body[data-theme="black"] .site-header {
+  background: rgba(2, 2, 5, 0.78);
+}
+
+body[data-theme="dark"] .brand-mark,
+body[data-theme="black"] .brand-mark {
+  color: #f8f6ff;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 14px 30px rgba(0, 0, 0, 0.24);
+}
+
+body[data-theme="dark"] .nav,
+body[data-theme="black"] .nav,
+body[data-theme="dark"] .theme-switch,
+body[data-theme="black"] .theme-switch {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+body[data-theme="dark"] .nav a,
+body[data-theme="black"] .nav a,
+body[data-theme="dark"] .theme-switch button,
+body[data-theme="black"] .theme-switch button {
+  color: rgba(248, 246, 255, 0.72);
+}
+
+body[data-theme="dark"] .nav a:hover,
+body[data-theme="black"] .nav a:hover,
+body[data-theme="dark"] .theme-switch button:hover,
+body[data-theme="black"] .theme-switch button:hover,
+body[data-theme="dark"] .theme-switch button.active,
+body[data-theme="black"] .theme-switch button.active {
+  color: #fff;
+}
+
+body[data-theme="dark"] .theme-switch button.active,
+body[data-theme="black"] .theme-switch button.active {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+}
+
+body[data-theme="dark"] .menu-button,
+body[data-theme="black"] .menu-button,
+body[data-theme="dark"] .ghost-button,
+body[data-theme="black"] .ghost-button,
+body[data-theme="dark"] .pill,
+body[data-theme="black"] .pill,
+body[data-theme="dark"] .metrics-strip span,
+body[data-theme="black"] .metrics-strip span,
+body[data-theme="dark"] .provider-row span,
+body[data-theme="black"] .provider-row span {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.13);
+}
+
+body[data-theme="dark"] .menu-button span,
+body[data-theme="black"] .menu-button span {
+  background: var(--ink);
+}
+
+body[data-theme="dark"] .hero h1,
+body[data-theme="black"] .hero h1,
+body[data-theme="dark"] .section h2,
+body[data-theme="black"] .section h2,
+body[data-theme="dark"] .closing h2,
+body[data-theme="black"] .closing h2 {
+  color: var(--ink);
+}
+
+body[data-theme="dark"] .hero-canvas,
+body[data-theme="black"] .hero-canvas {
+  mix-blend-mode: screen;
+  opacity: 0.72;
+}
+
+body[data-theme="dark"] .screen,
+body[data-theme="black"] .screen {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+body[data-theme="dark"] .floating-feature-badge,
+body[data-theme="black"] .floating-feature-badge,
+body[data-theme="dark"] .query-card,
+body[data-theme="black"] .query-card,
+body[data-theme="dark"] .feature-card,
+body[data-theme="black"] .feature-card,
+body[data-theme="dark"] .timeline-item,
+body[data-theme="black"] .timeline-item,
+body[data-theme="dark"] .accordion-item,
+body[data-theme="black"] .accordion-item,
+body[data-theme="dark"] .closing,
+body[data-theme="black"] .closing {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.055)),
+    radial-gradient(circle at 30% 12%, rgba(111, 99, 255, 0.24), transparent 58%);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 82px rgba(0, 0, 0, 0.28);
+}
+
+body[data-theme="black"] .floating-feature-badge,
+body[data-theme="black"] .query-card,
+body[data-theme="black"] .feature-card,
+body[data-theme="black"] .timeline-item,
+body[data-theme="black"] .accordion-item,
+body[data-theme="black"] .closing {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035)),
+    radial-gradient(circle at 30% 12%, rgba(111, 99, 255, 0.18), transparent 58%);
+}
+
+body[data-theme="dark"] .badge-copy strong,
+body[data-theme="black"] .badge-copy strong,
+body[data-theme="dark"] .query-card h3,
+body[data-theme="black"] .query-card h3,
+body[data-theme="dark"] .feature-card h3,
+body[data-theme="black"] .feature-card h3,
+body[data-theme="dark"] .timeline h3,
+body[data-theme="black"] .timeline h3 {
+  color: var(--ink);
+}
+
+body[data-theme="dark"] .badge-copy small,
+body[data-theme="black"] .badge-copy small,
+body[data-theme="dark"] .query-card p,
+body[data-theme="black"] .query-card p,
+body[data-theme="dark"] .feature-card p,
+body[data-theme="black"] .feature-card p,
+body[data-theme="dark"] .timeline p,
+body[data-theme="black"] .timeline p,
+body[data-theme="dark"] .accordion-body p,
+body[data-theme="black"] .accordion-body p {
+  color: var(--muted);
+}
+
+body[data-theme="dark"] .accordion-item button,
+body[data-theme="black"] .accordion-item button {
+  color: var(--ink);
+}
+
+body[data-theme="black"] .dock {
+  background: rgba(0, 0, 0, 0.86);
+  border-color: rgba(255, 255, 255, 0.13);
 }
 
 @media (max-width: 1060px) {

@@ -8,12 +8,15 @@ import {
   Box,
   Brain,
   ChevronDown,
+  Circle,
   Download,
   GitBranch,
   Layers3,
   LockKeyhole,
+  Moon,
   Search,
   Sparkles,
+  Sun,
   Tags,
   WandSparkles,
 } from "lucide-react";
@@ -29,6 +32,11 @@ const downloadUrl = "https://github.com/lyria13579/x-organizer-extension/archive
 const headline = "X Organizer";
 const subtitle =
   "Turn your X bookmarks, likes, and reposts into a searchable, categorized, AI-queryable local library.";
+const themeOptions = [
+  { id: "light", label: "Light", icon: Sun },
+  { id: "dark", label: "Dark", icon: Moon },
+  { id: "black", label: "Black", icon: Circle },
+];
 
 const reveal = {
   hidden: { opacity: 0.32, y: 34, filter: "blur(8px)" },
@@ -65,6 +73,17 @@ function TypewriterText({ text }) {
     <span className="typewriter" aria-label={text}>
       <span aria-hidden="true">{text.slice(0, visibleCount)}</span>
       <span className="typewriter-cursor" aria-hidden="true" />
+    </span>
+  );
+}
+
+function LogoMark({ className = "" }) {
+  return (
+    <span className={`brand-mark ${className}`} aria-hidden="true">
+      <span className="brand-mark__card" />
+      <span className="brand-mark__hole" />
+      <span className="brand-mark__line line-one" />
+      <span className="brand-mark__line line-two" />
     </span>
   );
 }
@@ -307,11 +326,23 @@ function HeroCanvas() {
 
 function Header() {
   const [open, setOpen] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    if (typeof window === "undefined") return "light";
+    const requestedTheme = new URLSearchParams(window.location.search).get("theme");
+    if (themeOptions.some((option) => option.id === requestedTheme)) return requestedTheme;
+    return window.localStorage.getItem("x-organizer-site-theme") || "light";
+  });
   const items = ["Features", "Workflow", "AI", "Design"];
+
+  useEffect(() => {
+    document.body.dataset.theme = theme;
+    window.localStorage.setItem("x-organizer-site-theme", theme);
+  }, [theme]);
+
   return (
     <motion.header className="site-header" initial={{ y: -24, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.7 }}>
       <a className="brand" href="#top" aria-label="X Organizer home">
-        <span className="brand-mark">整</span>
+        <LogoMark />
         <span>X Organizer</span>
       </a>
       <nav className={open ? "nav open" : "nav"} aria-label="Primary navigation">
@@ -322,6 +353,21 @@ function Header() {
         ))}
       </nav>
       <div className="header-actions">
+        <div className="theme-switch" aria-label="Theme switcher">
+          {themeOptions.map(({ id, label, icon: Icon }) => (
+            <button
+              className={theme === id ? "active" : ""}
+              key={id}
+              type="button"
+              aria-label={`Use ${label} mode`}
+              aria-pressed={theme === id}
+              title={`${label} mode`}
+              onClick={() => setTheme(id)}
+            >
+              <Icon size={15} />
+            </button>
+          ))}
+        </div>
         <a className="ghost-button compact" href={githubUrl} target="_blank" rel="noreferrer">
           <GitBranch size={18} />
           GitHub
