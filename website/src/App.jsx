@@ -695,6 +695,7 @@ function AiPanel() {
           autoPlay
           loop
           initiallyMuted
+          acknowledgeRemotionLicense
           clickToPlay={false}
           controls={false}
           style={{ width: "100%", aspectRatio: "16 / 9" }}
